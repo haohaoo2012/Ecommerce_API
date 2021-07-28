@@ -9,13 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.ecommerce.nashtech.util.TestConstants.*;
-import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -24,9 +21,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
-@TestPropertySource("/application-test.properties")
-@Sql(value = {"/sql/create-user-before.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@Sql(value = {"/sql/create-user-after.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 public class RegistrationControllerTest {
 
     @Autowired
@@ -79,6 +73,7 @@ public class RegistrationControllerTest {
         registrationRequest.setFirstName(FIRST_NAME);
         registrationRequest.setLastName(LAST_NAME);
 
+
         mockMvc.perform(post(URL_REGISTRATION_BASIC)
                 .content(mapper.writeValueAsString(registrationRequest))
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -86,7 +81,16 @@ public class RegistrationControllerTest {
                 .andExpect(jsonPath("$.emailError").value("Email is already used."));
     }
 
+    @Test
+    public void registration_ShouldCaptchaNotFilled() throws Exception {
 
+
+        mockMvc.perform(post(URL_REGISTRATION_BASIC)
+                .content(mapper.writeValueAsString(registrationRequest))
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.captchaError").value("Fill captcha."));
+    }
 
     @Test
     public void registration_ShouldInputFieldsAreEmpty() throws Exception {
@@ -98,12 +102,6 @@ public class RegistrationControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-    @Test
-    public void activateEmailCode() throws Exception {
-        mockMvc.perform(get(URL_REGISTRATION_ACTIVATE, USER_ACTIVATION_CODE))
-                .andExpect(status().isOk())
-                .andExpect(content().string(equalTo("User successfully activated.")));
-    }
 
     @Test
     public void activateEmailCode_ShouldNotFoundActivationCode() throws Exception {

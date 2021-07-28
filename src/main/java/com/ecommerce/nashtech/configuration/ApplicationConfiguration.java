@@ -18,6 +18,7 @@ public class ApplicationConfiguration {
 
     @Bean
     public ModelMapper modelMapper() {
+        // Tạo object và cấu hình mapper
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration()
                 .setMatchingStrategy(MatchingStrategies.STRICT);

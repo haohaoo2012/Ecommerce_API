@@ -52,7 +52,6 @@ public class UserMapperTest {
         ReviewRequest reviewRequest = new ReviewRequest();
         reviewRequest.setAuthor(FIRST_NAME);
         reviewRequest.setMessage("Hello World!");
-
         Review review = modelMapper.map(reviewRequest, Review.class);
         assertEquals(reviewRequest.getAuthor(), review.getAuthor());
         assertEquals(reviewRequest.getMessage(), review.getMessage());

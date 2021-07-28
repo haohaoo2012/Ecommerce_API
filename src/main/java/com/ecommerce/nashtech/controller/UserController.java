@@ -36,12 +36,12 @@ public class UserController {
     @GetMapping("/info")
     public ResponseEntity<UserResponse> getUserInfo(@AuthenticationPrincipal UserPrincipal user) {
         return ResponseEntity.ok(userMapper.findUserByEmail(user.getEmail()));
-    }
+    }//check info user
 
     @PostMapping("/graphql/info")
     public ResponseEntity<ExecutionResult> getUserInfoByQuery(@RequestBody GraphQLRequest request) {
         return ResponseEntity.ok(graphQLProvider.getGraphQL().execute(request.getQuery()));
-    }
+    }//dùng query truy vấn thông tin liên quan tới user
 
     @PutMapping("/edit")
     public ResponseEntity<UserResponse> updateUserInfo(@AuthenticationPrincipal UserPrincipal user,
@@ -52,22 +52,22 @@ public class UserController {
         } else {
             return ResponseEntity.ok(userMapper.updateProfile(user.getEmail(), request));
         }
-    }
+    }//sửa thông tin user
 
     @PostMapping("/cart")
     public ResponseEntity<List<PerfumeResponse>> getCart(@RequestBody List<Long> perfumesIds) {
         return ResponseEntity.ok(userMapper.getCart(perfumesIds));
-    }
+    }//chọn id sp rồi post vô cart
 
     @GetMapping("/orders")
     public ResponseEntity<List<OrderResponse>> getUserOrders(@AuthenticationPrincipal UserPrincipal user) {
         return ResponseEntity.ok(orderMapper.findOrderByEmail(user.getEmail()));
-    }
+    }//check những orders
 
     @PostMapping("/graphql/orders")
     public ResponseEntity<ExecutionResult> getUserOrdersByQuery(@RequestBody GraphQLRequest request) {
         return ResponseEntity.ok(graphQLProvider.getGraphQL().execute(request.getQuery()));
-    }
+    }//dùng câu query để truy vấn những thông tin cần của đơn hàng
 
     @PostMapping("/order")
     public ResponseEntity<OrderResponse> postOrder(@Valid @RequestBody OrderRequest order, BindingResult bindingResult) {
@@ -76,7 +76,7 @@ public class UserController {
         } else {
             return ResponseEntity.ok(orderMapper.postOrder(order));
         }
-    }
+    }//post vào order mới
 
     @PostMapping("/review")
     public ResponseEntity<PerfumeResponse> addReviewToPerfume(@Valid @RequestBody ReviewRequest review,
@@ -88,5 +88,5 @@ public class UserController {
             messagingTemplate.convertAndSend("/topic/reviews/" + perfume.getId(), perfume);
             return ResponseEntity.ok(perfume);
         }
-    }
+    }// post đánh giá sp
 }

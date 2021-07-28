@@ -28,12 +28,12 @@ public class PerfumeController {
     @GetMapping("/{id}")
     public ResponseEntity<PerfumeResponse> getPerfume(@PathVariable("id") Long perfumeId) {
         return ResponseEntity.ok(perfumeMapper.findPerfumeById(perfumeId));
-    }
+    }//check sp theo id
 
     @PostMapping("/ids")
     public ResponseEntity<List<PerfumeResponse>> getPerfumesByIds(@RequestBody List<Long> perfumesIds) {
         return ResponseEntity.ok(perfumeMapper.findPerfumesByIds(perfumesIds));
-    }
+    }// post vô những id sp cần
 
     @PostMapping("/search")
     public ResponseEntity<List<PerfumeResponse>> findPerfumesByFilterParams(@RequestBody PerfumeSearchRequest filter) {
@@ -49,7 +49,7 @@ public class PerfumeController {
     public ResponseEntity<List<PerfumeResponse>> findByPerfumer(@RequestBody PerfumeSearchRequest filter) {
         return ResponseEntity.ok(perfumeMapper.findByPerfumerOrderByPriceDesc(filter.getPerfumer()));
     }
-
+//dùng quey truy vấn những thông tin cần thiết
     @PostMapping("/graphql/ids")
     public ResponseEntity<ExecutionResult> getPerfumesByIdsQuery(@RequestBody GraphQLRequest request) {
         return ResponseEntity.ok(graphQLProvider.getGraphQL().execute(request.getQuery()));

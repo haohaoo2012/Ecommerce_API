@@ -36,8 +36,9 @@ public class JwtProvider {
     @PostConstruct
     protected void init() {
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
-    }
+    }//Chuyển sang mã hóa
 
+    // Tạo ra jwt từ thông tin user
     public String createToken(String username, String role) {
         Claims claims = Jwts.claims().setSubject(username);
         claims.put("role", role);
@@ -52,6 +53,7 @@ public class JwtProvider {
                 .compact();
     }
 
+    // Lấy thông tin user từ jwt
     public boolean validateToken(String token) {
         try {
             Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);

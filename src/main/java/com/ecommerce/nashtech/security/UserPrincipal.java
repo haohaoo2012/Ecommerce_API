@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @Data
-public class UserPrincipal implements UserDetails, OAuth2User {
+public class UserPrincipal implements UserDetails {
 
     private final Long id;
     private final String email;
@@ -33,15 +33,6 @@ public class UserPrincipal implements UserDetails, OAuth2User {
         return userPrincipal;
     }
 
-    @Override
-    public Map<String, Object> getAttributes() {
-        return attributes;
-    }
-
-    @Override
-    public String getName() {
-        return email;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

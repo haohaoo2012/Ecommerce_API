@@ -39,6 +39,7 @@ public class EmailConfiguration {
     private String debug;
 
     @Bean
+    //tạo mailsender
     public JavaMailSender getMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         mailSender.setHost(host);
@@ -51,7 +52,7 @@ public class EmailConfiguration {
         mailProperties.setProperty("mail.smtp.auth", auth);
         mailProperties.setProperty("mail.smtp.starttls.enable", enable);
         return mailSender;
-    }
+    }//sử dụng tài khoản gmail để gửi mail thông báo
 
     @Bean
     public ITemplateResolver thymeleafTemplateResolver() {

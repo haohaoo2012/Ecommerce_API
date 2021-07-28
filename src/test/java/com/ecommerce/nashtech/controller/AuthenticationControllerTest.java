@@ -26,9 +26,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @RunWith(SpringRunner.class)
 @AutoConfigureMockMvc
-@TestPropertySource("/application-test.properties")
-@Sql(value = {"/sql/create-user-before.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-@Sql(value = {"/sql/create-user-after.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 public class AuthenticationControllerTest {
 
     @Autowired
@@ -92,15 +89,7 @@ public class AuthenticationControllerTest {
                 .andExpect(jsonPath("$", is("Email not found")));
     }
 
-    @Test
-    public void getPasswordResetCode() throws Exception {
-        mockMvc.perform(get(URL_AUTH_RESET + "/{code}", USER_PASSWORD_RESET_CODE))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(USER2_ID))
-                .andExpect(jsonPath("$.email").value(USER2_EMAIL))
-                .andExpect(jsonPath("$.firstName").value(USER2_NAME))
-                .andExpect(jsonPath("$.passwordResetCode").value(USER_PASSWORD_RESET_CODE));
-    }
+
 
     @Test
     public void passwordReset() throws Exception {
@@ -114,7 +103,6 @@ public class AuthenticationControllerTest {
     @Test
     public void passwordReset_ShouldPasswordsNotMatch() throws Exception {
         passwordResetRequest.setPassword2("12345");
-
         mockMvc.perform(post(URL_AUTH_RESET)
                 .content(mapper.writeValueAsString(passwordResetRequest))
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -125,7 +113,6 @@ public class AuthenticationControllerTest {
     @Test
     public void passwordReset_ShouldPassword2BeEmpty() throws Exception {
         passwordResetRequest.setPassword2("");
-
         mockMvc.perform(post(URL_AUTH_RESET)
                 .content(mapper.writeValueAsString(passwordResetRequest))
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -139,7 +126,6 @@ public class AuthenticationControllerTest {
         PasswordResetRequest requestDto = new PasswordResetRequest();
         requestDto.setPassword(USER_PASSWORD);
         requestDto.setPassword2(USER_PASSWORD);
-
         mockMvc.perform(put(URL_AUTH_BASIC + "/edit/password")
                 .content(mapper.writeValueAsString(requestDto))
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
