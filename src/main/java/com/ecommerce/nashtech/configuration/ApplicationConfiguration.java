@@ -15,7 +15,6 @@ public class ApplicationConfiguration {
     public PasswordEncoder getPasswordEncoder() {
         return new BCryptPasswordEncoder(8);
     }
-
     @Bean
     public ModelMapper modelMapper() {
         // Tạo object và cấu hình mapper
